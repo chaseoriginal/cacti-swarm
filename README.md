@@ -8,8 +8,8 @@ deployment and polls this repository for changes.
 | Portainer stack id | 1 |
 | Portainer host | ore-dock-101-1 |
 | Endpoint | - (id -) |
-| Swarm | bd77jug521l1 |
-| Live service | cacti-swarm_db |
+| Swarm | True |
+| Live service | svc:cacti-swarm_cacti |
 | Git repo | https://github.com/chaseoriginal/cacti-swarm |
 | Compose file | `docker-compose.yml` |
 | Auto-update poll | every 900s |
@@ -39,8 +39,8 @@ deployment and polls this repository for changes.
 ## Verifying a deployment
 
 ```bash
-docker service ls --filter name=cacti-swarm_db
-docker service inspect cacti-swarm_db --format '{{json .Spec.TaskTemplate.ContainerSpec.Mounts}}'
+docker service ls --filter name=svc:cacti-swarm_cacti
+docker service inspect svc:cacti-swarm_cacti --format '{{json .Spec.TaskTemplate.ContainerSpec.Mounts}}'
 ```
 
 A healthy stack shows `1/1` and the same volume names as before.

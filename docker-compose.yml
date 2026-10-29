@@ -5,16 +5,18 @@ services:
     domainname: ${domainname}
     hostname: ${cacti_hostname}
     environment:
-    - DB_NAME=${DB_NAME}
-    - DB_USER=${DB_USER}
-    - DB_PASS=${DB_PASS}
-    - DB_HOST=${DB_HOST}
-    - DB_PORT=${DB_PORT}
-    - DB_ROOT_PASS=${DB_ROOT_PASS}
-    - INITIALIZE_DB=${INITIALIZE_DB}
+    - DB_NAME=cacti_master
+    - DB_USER=cactiuser
+    - DB_PASS=vaM5W^`Y=jG>UswQc1S{
+    - DB_HOST=catcidb
+    - DB_PORT=3306
+    - DB_ROOT_PASS=vwRmgy;_w$O*_~G;$T9D
+    - INITIALIZE_DB=1
     - TZ=America/Chicago
     volumes:
-    - cacti-swarm_cacti-db:/var/lib/mysql
+    - cacti-swarm_cacti-data:/cacti
+    - cacti-swarm_cacti-spine:/spine
+    - cacti-swarm_cacti-backups:/backups
     ports:
     - target: 80
       published: 81
@@ -57,10 +59,12 @@ services:
     - --innodb_io_capacity=5000
     - --innodb_io_capacity_max=10000
     environment:
-    - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASS}
     - TZ=America/Chicago
     volumes:
-    - cacti-swarm_cacti-db:/var/lib/mysql
+    - cacti-swarm_cacti-backups:/backups
+    - cacti-swarm_cacti-data:/cacti
+    - cacti-swarm_cacti-spine:/spine
     ports:
     - target: 3306
       published: 3306
@@ -73,5 +77,9 @@ services:
       restart_policy:
         condition: on-failure
 volumes:
-  cacti-swarm_cacti-db:
-    name: cacti-swarm_cacti-db
+  cacti-swarm_cacti-data:
+    name: cacti-swarm_cacti-data
+  cacti-swarm_cacti-spine:
+    name: cacti-swarm_cacti-spine
+  cacti-swarm_cacti-backups:
+    name: cacti-swarm_cacti-backups
