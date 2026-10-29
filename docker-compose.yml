@@ -1,0 +1,77 @@
+services:
+  cacti:
+    image: smcline06/cacti
+    container_name: ${cacti_container}
+    domainname: ${domainname}
+    hostname: ${cacti_hostname}
+    environment:
+    - DB_NAME=${DB_NAME}
+    - DB_USER=${DB_USER}
+    - DB_PASS=${DB_PASS}
+    - DB_HOST=${DB_HOST}
+    - DB_PORT=${DB_PORT}
+    - DB_ROOT_PASS=${DB_ROOT_PASS}
+    - INITIALIZE_DB=${INITIALIZE_DB}
+    - TZ=America/Chicago
+    volumes:
+    - cacti-swarm_cacti-db:/var/lib/mysql
+    ports:
+    - target: 80
+      published: 81
+      protocol: tcp
+      mode: host
+    - target: 443
+      published: 8443
+      protocol: tcp
+      mode: host
+    deploy:
+      placement:
+        constraints:
+        - node.labels.deployment.target.cacti == true
+      restart_policy:
+        condition: on-failure
+    links:
+    - db
+  db:
+    image: mariadb:10.3
+    container_name: ${db_container}
+    domainname: ${domainname}
+    hostname: ${DB_HOST}
+    command:
+    - mysqld
+    - --character-set-server=utf8mb4
+    - --collation-server=utf8mb4_unicode_ci
+    - --max_connections=200
+    - --max_heap_table_size=128M
+    - --max_allowed_packet=32M
+    - --tmp_table_size=128M
+    - --join_buffer_size=128M
+    - --innodb_buffer_pool_size=1G
+    - --innodb_doublewrite=ON
+    - --innodb_flush_log_at_timeout=3
+    - --innodb_read_io_threads=32
+    - --innodb_write_io_threads=16
+    - --innodb_buffer_pool_instances=9
+    - --innodb_file_format=Barracuda
+    - --innodb_large_prefix=1
+    - --innodb_io_capacity=5000
+    - --innodb_io_capacity_max=10000
+    environment:
+    - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    - TZ=America/Chicago
+    volumes:
+    - cacti-swarm_cacti-db:/var/lib/mysql
+    ports:
+    - target: 3306
+      published: 3306
+      protocol: tcp
+      mode: host
+    deploy:
+      placement:
+        constraints:
+        - node.labels.deployment.target.cacti == true
+      restart_policy:
+        condition: on-failure
+volumes:
+  cacti-swarm_cacti-db:
+    name: cacti-swarm_cacti-db
