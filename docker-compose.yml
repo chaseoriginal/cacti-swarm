@@ -7,10 +7,10 @@ services:
     environment:
     - DB_NAME=cacti_master
     - DB_USER=cactiuser
-    - DB_PASS=REDACTED
+    - DB_PASS=${DB_PASS}
     - DB_HOST=catcidb
     - DB_PORT=3306
-    - DB_ROOT_PASS=REDACTED
+    - DB_ROOT_PASS=${DB_ROOT_PASS}
     - INITIALIZE_DB=1
     - TZ=America/Chicago
     volumes:
@@ -62,6 +62,7 @@ services:
     - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASS}
     - TZ=America/Chicago
     volumes:
+    - cacti-swarm_cacti-db:/var/lib/mysql
     - cacti-swarm_cacti-backups:/backups
     - cacti-swarm_cacti-data:/cacti
     - cacti-swarm_cacti-spine:/spine
@@ -77,6 +78,8 @@ services:
       restart_policy:
         condition: on-failure
 volumes:
+  cacti-swarm_cacti-db:
+    name: cacti-swarm_cacti-db
   cacti-swarm_cacti-data:
     name: cacti-swarm_cacti-data
   cacti-swarm_cacti-spine:
