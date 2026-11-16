@@ -1,6 +1,6 @@
 services:
   cacti:
-    image: smcline06/cacti:latest@sha256:a680593606b47a271d25a3db83d17df715a83f46791e1c37cc8377518d0b1057
+    image: smcline06/cacti:latest@sha256:a680593606b47a271d25a3db83d17df715a83f46791e1c37cc8377518d0b1057:latest@sha256:a680593606b47a271d25a3db83d17df715a83f46791e1c37cc8377518d0b1057
     container_name: ${cacti_container}
     domainname: ${domainname}
     hostname: ${cacti_hostname}
