@@ -35,7 +35,7 @@ services:
     links:
     - db
   db:
-    image: 10.3.39
+    image: mariadb:10.3.39
     container_name: ${db_container}
     domainname: ${domainname}
     hostname: ${DB_HOST}
